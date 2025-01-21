@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Romantic Question</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            animation: gradient 15s ease infinite;
+            background-size: 400% 400%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .question {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-weight: bold;
+        }
+
+        .buttons {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 25px;
+            margin: 0 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        #yesBtn {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, 0);
+            background-color: #ff1493;
+            color: white;
+            z-index: 100;
+        }
+
+        #yesBtn:hover {
+            background-color: #ff69b4;
+            transform: translate(-50%, 0) scale(1.1);
+        }
+
+        #noBtn {
+            position: absolute;
+            background-color: #4a90e2;
+            color: white;
+            transition: all 0.5s ease-out;
+        }
+
+        .hearts {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: float 6s ease-in infinite;
+            opacity: 0.5;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 1; }
+            100% { transform: translateY(-100px) translateX(100px); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+    <div class="question">What will you call me?</div>
+    <div class="buttons">
+        <button id="yesBtn" onclick="redirect()">Babe</button>
+        <button id="noBtn">Chinmay</button>
+    </div>
+
+    <script>
+        // Hearts background
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            document.getElementById('hearts').appendChild(heart);
+            setTimeout(() => heart.remove(), 6000);
+        }
+
+        setInterval(createHeart, 300);
+
+        const noBtn = document.getElementById('noBtn');
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            checkDistance();
+        });
+
+        function checkDistance() {
+            const noBtnRect = noBtn.getBoundingClientRect();
+            const btnCenterX = noBtnRect.left + noBtnRect.width / 2;
+            const btnCenterY = noBtnRect.top + noBtnRect.height / 2;
+            const distance = Math.hypot(mouseX - btnCenterX, mouseY - btnCenterY);
+            if (distance < 200) moveButton();
+        }
+
+        function moveButton() {
+            const maxX = window.innerWidth - noBtn.offsetWidth;
+            const maxY = window.innerHeight - noBtn.offsetHeight;
+            
+            let newX = mouseX < window.innerWidth / 2 ? 
+                Math.random() * (maxX - maxX/2) + maxX/2 : 
+                Math.random() * (maxX/2);
+            
+            let newY = mouseY < window.innerHeight / 2 ? 
+                Math.random() * (maxY - maxY/2) + maxY/2 : 
+                Math.random() * (maxY/2);
+            
+            noBtn.style.left = newX + 'px';
+            noBtn.style.top = newY + 'px';
+        }
+
+        function redirect() {
+            window.location.href = 'response.html';
+        }
+
+        noBtn.style.left = '60%';
+        noBtn.style.top = '50%';
+    </script>
+</body>
+</html>
