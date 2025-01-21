@@ -31,6 +31,8 @@
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
             font-weight: bold;
+            text-align: center;
+            padding: 0 20px;
         }
 
         .buttons {
@@ -95,13 +97,36 @@
 </head>
 <body>
     <div class="hearts" id="hearts"></div>
-    <div class="question">What will you call me?</div>
+    <div class="question" id="question">What will you call me?</div>
     <div class="buttons">
         <button id="yesBtn" onclick="redirect()">Babe</button>
-        <button id="noBtn">Chinmay</button>
+        <button id="noBtn" onclick="handleNo()">Chinmay</button>
     </div>
 
     <script>
+        // Get count from URL parameter or default to 0
+        const urlParams = new URLSearchParams(window.location.search);
+        let againCount = parseInt(urlParams.get('count')) || 0;
+
+        // Update question based on count
+        function updateQuestion() {
+            const question = document.getElementById('question');
+            if (againCount === 0) {
+                question.textContent = "What will you call me?";
+            } else {
+                question.textContent = "Think " + "again ".repeat(againCount) + "what will you call me?";
+            }
+        }
+
+        // Initial question update
+        updateQuestion();
+
+        function handleNo() {
+            // Increment count and reload page with new count
+            againCount++;
+            window.location.href = `?count=${againCount}`;
+        }
+
         // Hearts background
         function createHeart() {
             const heart = document.createElement('div');
